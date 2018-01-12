@@ -3,7 +3,7 @@ const TransactionModel = Backbone.Model.extend({
 		return this.get('account')[0]
 	},
 
-	getTraded () {
+	getTradedFormatted () {
 		return Utils.formatMoney(this.getTradedCurrency(), this.get('tradedAmount'))
 	},
 
@@ -11,7 +11,11 @@ const TransactionModel = Backbone.Model.extend({
 		return this.get('tradedCurrency')[0]
 	},
 
-	getPayment () {
+	getTradedAmount () {
+		return this.get('tradedAmount')
+	},
+
+	getPaymentFormatted () {
 		return Utils.formatMoney(this.getPaymentCurrency(), this.get('paymentAmount'))
 	},
 
@@ -19,8 +23,20 @@ const TransactionModel = Backbone.Model.extend({
 		return this.get('paymentCurrency')[0]
 	},
 
-	getFee () {
-		return Utils.formatMoney(this.get('feeCurrency')[0], this.get('feeAmount'))
+	getPaymentAmount () {
+		return this.get('paymentAmount')
+	},
+
+	getFeeFormatted () {
+		return Utils.formatMoney(this.getFeeCurrency(), this.get('feeAmount'))
+	},
+
+	getFeeCurrency () {
+		return this.get('feeCurrency')[0]
+	},
+
+	getFeeAmount () {
+		return this.get('feeAmount')
 	},
 
 	getTotal () {
@@ -37,7 +53,7 @@ const TransactionModel = Backbone.Model.extend({
 			result += 'SELL '
 			tradedAmount = -tradedAmount
 		}
-		result += Utils.formatMoney(this.getTradedCurrency(), tradedAmount) + ' for ' + this.getPayment()
+		result += Utils.formatMoney(this.getTradedCurrency(), tradedAmount) + ' for ' + this.getPaymentFormatted()
 		const price = paymentAmount / tradedAmount
 		result += ` (@ ${price} ${this.getPaymentCurrency().symbol}/${this.getTradedCurrency().symbol})`
 		return result
