@@ -4,10 +4,23 @@ $.ajaxSetup({
 	}
 })
 
-const accounts = new AccountCollection()
-accounts.fetch({success: () => {
-	accounts.forEach(account => {
-		$('body').append(`<div>Account: ${account.get('name')}</div>`)
+const $table = $('#table-transactions tbody')
+
+const transactions = new TransactionCollection()
+transactions.fetch({success: () => {
+	transactions.forEach(transaction => {
+		$table.append(`
+			<tr>
+				<td>${transaction.get('timestamp')}</td>
+				<td>${transaction.getAccount().name}</td>
+				<td>${transaction.format()}</td>
+				<td>${transaction.getFee()}</td>
+				<td>${transaction.getTotal()}</td>
+				<td></td>
+				<td></td>
+				<td>${transaction.get('blockchainRef')}</td>
+				<td>${transaction.get('observations')}</td>
+			</tr>
+		`)
 	})
-	$('body').append(`<hr/>`)
 }})
