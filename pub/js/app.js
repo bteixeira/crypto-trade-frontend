@@ -23,15 +23,11 @@ const balance = (function () {
 			return wallet.get(currency)
 		},
 
-		add (amount, currency, walletName) {
-			amount = parseFloat(amount)
-			if (isNaN(amount)) {
-				throw 'Tried to add an invalid amount'
-			}
+		add (amount, walletName) {
 			var wallet = getWallet(walletName)
-			wallet.add(new AmountModel(currency, amount))
+			wallet.add(amount)
 			if (walletName) {
-				this.add(amount, currency) // Add it to global wallet
+				this.add(amount) // Add it to global wallet
 			}
 		}
 	}
@@ -44,13 +40,13 @@ transactions.fetch({success: () => {
 		var payment = transaction.getPayment()
 		var fee = transaction.getFee()
 		const accountName = transaction.getAccount().getName()
-		balance.add(traded.getAmount(), traded.getCurrency(), accountName)
+		balance.add(traded, accountName)
 		if (traded.getAmount() < 0) {
-			balance.add(payment.getAmount(), payment.getCurrency(), accountName)
+			balance.add(payment, accountName)
 		} else {
-			balance.add(-payment.getAmount(), payment.getCurrency(), accountName)
+			balance.add(payment.neg(), accountName)
 		}
-		balance.add(-fee.getAmount(), fee.getCurrency(), accountName)
+		balance.add(fee.neg(), accountName)
 		$table.append(`
 			<tr>
 				<td>${transaction.getTimestamp()}</td>
