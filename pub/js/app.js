@@ -105,9 +105,10 @@ function updateTransactions () {
 		if (passFilter(transaction)) {
 			$tbody.append(`
 				<tr>
-					<td>${transaction.getTimestamp()}</td>
+					<td>${transaction.getTimestamp().toLocaleDateString()} ${transaction.getTimestamp().toLocaleTimeString()}</td>
 					<td>${accountName}</td>
 					<td>${transaction.format()}</td>
+					<td>${transaction.getPrice()}</td>
 					<td>${fee}</td>
 					<td>${transaction.getTotal()}</td>
 					<td>${balance.getAll(accountName)}</td>
