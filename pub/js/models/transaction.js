@@ -23,7 +23,10 @@ const TransactionModel = Backbone.Model.extend({
 	},
 
 	getTotal () {
-		return 'TODO'
+		var multi = new MultiAmountModel()
+		multi.add(this.getPayment())
+		multi.add(this.getFee())
+		return multi
 	},
 
 	format () {

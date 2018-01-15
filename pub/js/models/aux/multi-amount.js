@@ -22,4 +22,10 @@ const MultiAmountModel = Backbone.Model.extend({
 		}
 		this._amounts.set(symbol, _amount)
 	},
+	format () {
+		return Array.from(this._amounts.values()).join(' ')
+	},
+	toString () {
+		return this.format()
+	}
 })

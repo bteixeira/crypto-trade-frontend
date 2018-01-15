@@ -4,7 +4,7 @@ $.ajaxSetup({
 	}
 })
 
-const $table = $('#table-transactions tbody')
+const $tbody = $('#table-transactions tbody')
 
 const balance = (function () {
 	const balance = new Map()
@@ -22,19 +22,22 @@ const balance = (function () {
 			wallet = getWallet(wallet)
 			return wallet.get(currency)
 		},
-
+		getAll (wallet) {
+			return getWallet(wallet)
+		},
 		add (amount, walletName) {
 			var wallet = getWallet(walletName)
 			wallet.add(amount)
 			if (walletName) {
 				this.add(amount) // Add it to global wallet
 			}
-		}
+		},
 	}
 }())
 
 const transactions = new TransactionCollection()
 transactions.fetch({success: () => {
+	$tbody.empty()
 	transactions.forEach(transaction => {
 		var traded = transaction.getTraded()
 		var payment = transaction.getPayment()
@@ -47,15 +50,15 @@ transactions.fetch({success: () => {
 			balance.add(payment.neg(), accountName)
 		}
 		balance.add(fee.neg(), accountName)
-		$table.append(`
+		$tbody.append(`
 			<tr>
 				<td>${transaction.getTimestamp()}</td>
 				<td>${accountName}</td>
 				<td>${transaction.format()}</td>
 				<td>${fee}</td>
 				<td>${transaction.getTotal()}</td>
-				<td>${balance.get(traded.getCurrency(), accountName)} ; ${balance.get(payment.getCurrency(), accountName)}</td>
-				<td>${balance.get(traded.getCurrency())} ; ${balance.get(payment.getCurrency())}</td>
+				<td>${balance.getAll(accountName)}</td>
+				<td>${balance.getAll()}</td>
 				<td>${transaction.get('blockchainRef')}</td>
 				<td>${transaction.get('observations')}</td>
 			</tr>
