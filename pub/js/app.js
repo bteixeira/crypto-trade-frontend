@@ -7,7 +7,7 @@ $.ajaxSetup({
 const $tbody = $('#table-transactions tbody')
 
 const balance = (function () {
-	const balance = new Map()
+	var balance = new Map()
 
 	function getWallet (name) {
 		name = name || ''
@@ -32,12 +32,64 @@ const balance = (function () {
 				this.add(amount) // Add it to global wallet
 			}
 		},
+		reset () {
+			balance = new Map()
+		}
 	}
 }())
 
+const currencies = new CurrencyCollection()
+currencies.fetch().then(() => {
+	const $select = $('#select-currencies')
+	currencies.forEach(currency => {
+		$select.append(`<option value="${currency.getSymbol()}">${currency.getSymbol()}</option>`)
+	})
+	$select.on('change', () => {
+		filters.currency = $select.val()
+		updateTransactions()
+	})
+})
+
+const accounts = new AccountCollection()
+accounts.fetch().then(() => {
+	const $select = $('#select-accounts')
+	accounts.forEach(account => {
+		$select.append(`<option value="${account.getName()}">${account.getName()}</option>`)
+	})
+	$select.on('change', () => {
+		filters.account = $select.val()
+		updateTransactions()
+	})
+})
+
 const transactions = new TransactionCollection()
 transactions.fetch({success: () => {
+	updateTransactions()
+}})
+
+const filters = {}
+function passFilter (transaction) {
+	if (
+		filters.currency &&
+		transaction.getTraded().getCurrency().getSymbol() !== filters.currency &&
+		transaction.getPayment().getCurrency().getSymbol() !== filters.currency &&
+		transaction.getFee().getCurrency().getSymbol() !== filters.currency
+	) {
+		return false
+	}
+
+	if (
+		filters.account && transaction.getAccount().getName() !== filters.account
+	) {
+		return false
+	}
+
+	return true
+}
+
+function updateTransactions () {
 	$tbody.empty()
+	balance.reset()
 	transactions.forEach(transaction => {
 		var traded = transaction.getTraded()
 		var payment = transaction.getPayment()
@@ -50,18 +102,20 @@ transactions.fetch({success: () => {
 			balance.add(payment.neg(), accountName)
 		}
 		balance.add(fee.neg(), accountName)
-		$tbody.append(`
-			<tr>
-				<td>${transaction.getTimestamp()}</td>
-				<td>${accountName}</td>
-				<td>${transaction.format()}</td>
-				<td>${fee}</td>
-				<td>${transaction.getTotal()}</td>
-				<td>${balance.getAll(accountName)}</td>
-				<td>${balance.getAll()}</td>
-				<td>${transaction.get('blockchainRef')}</td>
-				<td>${transaction.get('observations')}</td>
-			</tr>
-		`)
+		if (passFilter(transaction)) {
+			$tbody.append(`
+				<tr>
+					<td>${transaction.getTimestamp()}</td>
+					<td>${accountName}</td>
+					<td>${transaction.format()}</td>
+					<td>${fee}</td>
+					<td>${transaction.getTotal()}</td>
+					<td>${balance.getAll(accountName)}</td>
+					<td>${balance.getAll()}</td>
+					<td>${transaction.get('blockchainRef')}</td>
+					<td>${transaction.get('observations')}</td>
+				</tr>
+			`)
+		}
 	})
-}})
+}
