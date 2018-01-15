@@ -1,7 +1,7 @@
 const AmountModel = Backbone.Model.extend({
 	constructor: function (currency, amount) {
 		Backbone.Model.apply(this)
-		this.set('currency', new CurrencyModel(currency))
+		this.set('currency', currency)
 		this.set('amount', amount)
 	},
 
