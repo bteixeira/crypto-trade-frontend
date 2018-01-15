@@ -48,8 +48,9 @@ const balance = (function () {
 const transactions = new TransactionCollection()
 transactions.fetch({success: () => {
 	transactions.forEach(transaction => {
-		balance.add(transaction.getTradedAmount(), transaction.getTradedCurrency().symbol, transaction.getAccount().name)
-		if (transaction.getTradedAmount() < 0) {
+		var traded = transaction.getTraded()
+		balance.add(traded.getAmount(), traded.getSymbol(), transaction.getAccount().name)
+		if (traded.getAmount() < 0) {
 			balance.add(transaction.getPaymentAmount(), transaction.getPaymentCurrency().symbol, transaction.getAccount().name)
 		} else {
 			balance.add(-transaction.getPaymentAmount(), transaction.getPaymentCurrency().symbol, transaction.getAccount().name)
@@ -62,8 +63,8 @@ transactions.fetch({success: () => {
 				<td>${transaction.format()}</td>
 				<td>${transaction.getFeeFormatted()}</td>
 				<td>${transaction.getTotal()}</td>
-				<td>${balance.get(transaction.getTradedCurrency().symbol, transaction.getAccount().name)} ; ${balance.get(transaction.getPaymentCurrency().symbol, transaction.getAccount().name)}</td>
-				<td>${balance.get(transaction.getTradedCurrency().symbol)} ; ${balance.get(transaction.getPaymentCurrency().symbol)}</td>
+				<td>${balance.get(traded.getSymbol(), transaction.getAccount().name)} ; ${balance.get(transaction.getPaymentCurrency().symbol, transaction.getAccount().name)}</td>
+				<td>${balance.get(traded.getSymbol())} ; ${balance.get(transaction.getPaymentCurrency().symbol)}</td>
 				<td>${transaction.get('blockchainRef')}</td>
 				<td>${transaction.get('observations')}</td>
 			</tr>
