@@ -5,9 +5,21 @@ const Utils = {
 			digits = 8
 		}
 		amount = parseFloat(amount)
-		if (!isNaN(amount)) {
-			amount = amount.toFixed(digits)
+		if (isNaN(amount)) {
+			throw 'Invalid number'
 		}
-		return String(currency.symbol).toUpperCase() + ' ' + amount
+		const symbol = String(currency.symbol)
+		var formatted
+		if (symbol in this.formatters) {
+			formatted = this.formatters[symbol](amount)
+		} else {
+			formatted = `${symbol.toUpperCase()} ${amount.toFixed(digits)}`
+		}
+		return `<span class="money-pill -${symbol.toLowerCase()}">${formatted}</span>`
+	},
+	formatters: {
+		EUR (amount) {
+			return `&euro; ${amount.toFixed(2)}`
+		}
 	},
 }

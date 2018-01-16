@@ -31,7 +31,7 @@ const TransactionModel = Backbone.Model.extend({
 
 	getPrice () {
 		const price = this.getPayment().getAmount() / this.getTraded().getAmount()
-		return `${price} ${this.getPayment().getSymbol()}/${this.getTraded().getSymbol()}`
+		return `${price.toFixed(4)} ${this.getPayment().getSymbol()}/${this.getTraded().getSymbol()}`
 	},
 
 	format () {
@@ -39,9 +39,9 @@ const TransactionModel = Backbone.Model.extend({
 		var traded = this.getTraded()
 		const paymentAmount = this.get('paymentAmount')
 		if (traded.getAmount() > 0) {
-			result += 'BUY '
+			result += '<strong>BUY</strong> '
 		} else if (traded.getAmount() < 0) {
-			result += 'SELL '
+			result += '<strong>SELL</strong> '
 			traded = traded.neg()
 		}
 		result += traded + ' for ' + this.getPayment()

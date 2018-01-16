@@ -1,0 +1,43 @@
+body, html {
+	font-family: 'Roboto', sans-serif;
+}
+
+#table-transactions tbody tr:nth-child(odd) {
+	background: #f1f1f1;
+}
+
+#table-transactions td {
+	padding: 5px;
+}
+
+#table-transactions tbody td {
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.money-pill {
+	border-radius: 5px;
+	padding: 5px;
+	white-space: nowrap;
+	background: #448833;
+	color: #eee;
+	font-size: 11px;
+	font-family: monospace;
+	font-weight: bold;
+	display: inline-block;
+	margin: 5px 0;
+}
+
+.money-pill.-eur{
+	background: darkblue;
+	color: #f1f133;
+}
+
+.money-pill.-xrp{
+	background: #111;
+	color: #ff3333;
+}
+
+strong {
+	font-weight: bold;
+}
