@@ -38,29 +38,29 @@ const balance = (function () {
 	}
 }())
 
-const currencies = new CurrencyCollection()
-currencies.fetch().then(() => {
-	const $select = $('#select-currencies')
-	currencies.forEach(currency => {
-		$select.append(`<option value="${currency.getSymbol()}">${currency.getSymbol()}</option>`)
-	})
-	$select.on('change', () => {
-		filters.currency = $select.val()
-		updateTransactions()
-	})
-})
-
-const accounts = new AccountCollection()
-accounts.fetch().then(() => {
-	const $select = $('#select-accounts')
-	accounts.forEach(account => {
-		$select.append(`<option value="${account.getName()}">${account.getName()}</option>`)
-	})
-	$select.on('change', () => {
-		filters.account = $select.val()
-		updateTransactions()
-	})
-})
+// const currencies = new CurrencyCollection()
+// currencies.fetch().then(() => {
+// 	const $select = $('#select-currencies')
+// 	currencies.forEach(currency => {
+// 		$select.append(`<option value="${currency.getSymbol()}">${currency.getSymbol()}</option>`)
+// 	})
+// 	$select.on('change', () => {
+// 		filters.currency = $select.val()
+// 		updateTransactions()
+// 	})
+// })
+//
+// const accounts = new AccountCollection()
+// accounts.fetch().then(() => {
+// 	const $select = $('#select-accounts')
+// 	accounts.forEach(account => {
+// 		$select.append(`<option value="${account.getName()}">${account.getName()}</option>`)
+// 	})
+// 	$select.on('change', () => {
+// 		filters.account = $select.val()
+// 		updateTransactions()
+// 	})
+// })
 
 const transactions = new TransactionCollection()
 transactions.fetch({success: () => {
@@ -68,7 +68,7 @@ transactions.fetch({success: () => {
 }})
 
 const filters = {
-	// currency:'XRP',
+	currency:'XRP',
 }
 function passFilter (transaction) {
 	if (
@@ -107,7 +107,7 @@ function updateTransactions () {
 		balance.add(fee.neg(), accountName)
 		if (passFilter(transaction)) {
 			$tbody.append(`
-				<tr>
+				<tr data-transaction-id="">
 					<td>${transaction.getTimestamp().toLocaleDateString()} ${transaction.getTimestamp().toLocaleTimeString()}</td>
 					<td>${accountName}</td>
 					<td>${transaction.format()}</td>
@@ -118,6 +118,8 @@ function updateTransactions () {
 					<td>${balance.getAll().only(...currencies)}</td>
 					<td>${transaction.get('blockchainRef')}</td>
 					<td>${transaction.get('observations')}</td>
+					<td><span class="action js-edit glyphicon glyphicon-pencil"/></td>
+					<td><span class="action js-delete glyphicon glyphicon-remove"/></td>
 				</tr>
 			`)
 		}
