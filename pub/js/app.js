@@ -36,39 +36,29 @@ const balance = (function () {
 	}
 }())
 
-// const currencies = new CurrencyCollection()
-// currencies.fetch().then(() => {
-// 	const $select = $('#select-currencies')
-// 	currencies.forEach(currency => {
-// 		$select.append(`<option value="${currency.getSymbol()}">${currency.getSymbol()}</option>`)
-// 	})
-// 	$select.on('change', () => {
-// 		filters.currency = $select.val()
-// 		updateTransactions()
-// 	})
-// })
-//
-// const accounts = new AccountCollection()
-// accounts.fetch().then(() => {
-// 	const $select = $('#select-accounts')
-// 	accounts.forEach(account => {
-// 		$select.append(`<option value="${account.getName()}">${account.getName()}</option>`)
-// 	})
-// 	$select.on('change', () => {
-// 		filters.account = $select.val()
-// 		updateTransactions()
-// 	})
-// })
+const currencies = new CurrencyCollection()
+new SelectCurrenciesView({
+	el: '#select-currencies',
+	collection: currencies,
+})
+currencies.fetch()
+
+const accounts = new AccountCollection()
+new SelectAccountsView({
+	el: '#select-accounts',
+	collection: accounts,
+})
+accounts.fetch()
 
 const transactions = new TransactionCollection()
-new TransactionTableView({
+const transactionsView = new TransactionTableView({
 	el: '#table-transactions',
 	collection: transactions,
 })
 transactions.fetch()
 
 const filters = {
-	currency:'XRP',
+	// currency:'XRP',
 }
 function passFilter (transaction) {
 	if (
