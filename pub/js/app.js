@@ -67,7 +67,9 @@ transactions.fetch({success: () => {
 	updateTransactions()
 }})
 
-const filters = {}
+const filters = {
+	// currency:'XRP',
+}
 function passFilter (transaction) {
 	if (
 		filters.currency &&
@@ -91,10 +93,11 @@ function updateTransactions () {
 	$tbody.empty()
 	balance.reset()
 	transactions.forEach(transaction => {
-		var traded = transaction.getTraded()
-		var payment = transaction.getPayment()
-		var fee = transaction.getFee()
+		const traded = transaction.getTraded()
+		const payment = transaction.getPayment()
+		const fee = transaction.getFee()
 		const accountName = transaction.getAccount().getName()
+		const currencies = transaction.getCurrencies()
 		balance.add(traded, accountName)
 		if (traded.getAmount() < 0) {
 			balance.add(payment, accountName)
@@ -111,8 +114,8 @@ function updateTransactions () {
 					<td>${transaction.getPrice()}</td>
 					<td>${fee}</td>
 					<td>${transaction.getTotal()}</td>
-					<td>${balance.getAll(accountName)}</td>
-					<td>${balance.getAll()}</td>
+					<td>${balance.getAll(accountName).only(...currencies)}</td>
+					<td>${balance.getAll().only(...currencies)}</td>
 					<td>${transaction.get('blockchainRef')}</td>
 					<td>${transaction.get('observations')}</td>
 				</tr>

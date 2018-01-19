@@ -33,11 +33,14 @@ const TransactionModel = Backbone.Model.extend({
 		const price = this.getPayment().getAmount() / this.getTraded().getAmount()
 		return `${price.toFixed(4)} ${this.getPayment().getSymbol()}/${this.getTraded().getSymbol()}`
 	},
-
+	getCurrencies () {
+		var amounts = [this.getTraded(), this.getPayment(), this.getFee()]
+		amounts = amounts.map(a => a.getCurrency())
+		return _.uniq(amounts, false, a => a.getSymbol())
+	},
 	format () {
 		var result = ''
 		var traded = this.getTraded()
-		const paymentAmount = this.get('paymentAmount')
 		if (traded.getAmount() > 0) {
 			result += '<strong>BUY</strong> '
 		} else if (traded.getAmount() < 0) {

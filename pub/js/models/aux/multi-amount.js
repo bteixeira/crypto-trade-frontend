@@ -11,11 +11,21 @@ const MultiAmountModel = Backbone.Model.extend({
 			return 0
 		}
 	},
+	only (...currencies) {
+		const other = new MultiAmountModel()
+		const keys = _.uniq(currencies.map(c => c.getSymbol()))
+		keys.forEach(k => {
+			const amount = this._amounts.get(k)
+			if (amount) {
+				other.add(amount)
+			}
+		})
+		return other
+	},
 	add (amount) {
 		const symbol = amount.getCurrency().getSymbol()
 		var _amount = this._amounts.get(symbol)
 		if (_amount) {
-			// _amount = amount.add(_amount)
 			_amount = new AmountModel(amount.getCurrency(), _amount.getAmount() + amount.getAmount())
 		} else {
 			_amount = amount
