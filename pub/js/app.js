@@ -38,14 +38,14 @@ const balance = (function () {
 
 const currencies = new CurrencyCollection()
 new SelectCurrenciesView({
-	el: '#select-currencies',
+	el: '.select-currencies',
 	collection: currencies,
 })
 currencies.fetch()
 
 const accounts = new AccountCollection()
 new SelectAccountsView({
-	el: '#select-accounts',
+	el: '.select-accounts',
 	collection: accounts,
 })
 accounts.fetch()
@@ -78,3 +78,7 @@ function passFilter (transaction) {
 
 	return true
 }
+
+$('.js-add-transaction').on('click', () => {
+	Overlay.show()
+})

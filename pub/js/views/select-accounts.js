@@ -8,6 +8,8 @@ const SelectAccountsView = Backbone.View.extend({
 		this.render()
 	},
 	render () {
+		this.$el.empty()
+		this.$el.append(`<option>-</option>`)
 		this.collection.forEach(account => {
 			this.$el.append(`<option value="${account.getName()}">${account.getName()}</option>`)
 		})

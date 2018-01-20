@@ -14,11 +14,9 @@
 </head>
 <body>
 Currency:
-<select id="select-currencies">
-	<option></option>
-</select>
+<select class="select-currencies"></select>
 Account:
-<select id="select-accounts">
+<select class="select-accounts">
 	<option></option>
 </select>
 
@@ -44,13 +42,11 @@ Account:
 <button><span class="js-add-transaction glyphicon glyphicon-plus"/></button>
 
 <div id="overlay">
+	<div class="background"></div>
 	<form class="form-transaction">
 		<div class="form-group">
 			<label>Account</label>
-			<select class="form-control">
-				<!--TODO CURRENCIES COLLECTION-->
-				<option></option>
-			</select>
+			<select class="form-control select-accounts"></select>
 		</div>
 		<div class="form-group">
 			<label>Date & time</label>
@@ -60,30 +56,21 @@ Account:
 			<label>Traded goods</label>
 			<div class="form-inline">
 				<input class="form-control" type="number">
-				<select class="form-control">
-					<!--TODO CURRENCIES COLLECTION-->
-					<option></option>
-				</select>
+				<select class="form-control select-currencies"></select>
 			</div>
 		</div>
 		<div class="form-group">
 			<label>Payment</label>
 			<div class="form-inline">
 				<input class="form-control" type="number">
-				<select class="form-control">
-					<!--TODO CURRENCIES COLLECTION-->
-					<option></option>
-				</select>
+				<select class="form-control select-currencies"></select>
 			</div>
 		</div>
 		<div class="form-group">
 			<label>Fee</label>
 			<div class="form-inline">
 				<input class="form-control" type="number">
-				<select class="form-control">
-					<!--TODO CURRENCIES COLLECTION-->
-					<option></option>
-				</select>
+				<select class="form-control select-currencies"></select>
 			</div>
 		</div>
 		<div class="form-group">
@@ -117,5 +104,6 @@ Account:
 <script src="js/views/select-accounts.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/app.js"></script>
+<script src="js/overlay.js"></script>
 </body>
 </html>

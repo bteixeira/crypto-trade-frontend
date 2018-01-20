@@ -1,20 +1,21 @@
-const Overlay = {
-	setCurrencies (currencies) {
+const Overlay = (function () {
+	const $el = $('#overlay')
+	$el.find('.background').on('click', () => {
+		Overlay.hide()
+	})
+	const Overlay = {
+		show () {
+			$el.toggleClass('-show', true)
+		},
+		hide () {
+			$el.toggleClass('-show', false)
+		},
+		clear () {
 
-	},
-	setAccounts (accounts) {
+		},
+		setTransaction (transaction) {
 
-	},
-	show () {
-
-	},
-	hide () {
-
-	},
-	clear () {
-
-	},
-	setTransaction (transaction) {
-
-	},
-}
+		},
+	}
+	return Overlay
+}())
