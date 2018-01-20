@@ -80,5 +80,6 @@ function passFilter (transaction) {
 }
 
 $('.js-add-transaction').on('click', () => {
+	Overlay.setTransaction(new TransactionModel())
 	Overlay.show()
 })

@@ -46,41 +46,42 @@ Account:
 	<form class="form-transaction">
 		<div class="form-group">
 			<label>Account</label>
-			<select class="form-control select-accounts"></select>
+			<select class="form-control select-accounts" name="account"></select>
 		</div>
 		<div class="form-group">
 			<label>Date & time</label>
-			<input class="form-control">
+			<input class="form-control" name="timestamp">
 		</div>
 		<div class="form-group">
 			<label>Traded goods</label>
 			<div class="form-inline">
-				<input class="form-control" type="number">
-				<select class="form-control select-currencies"></select>
+				<input class="form-control" type="number" name="tradedAmount">
+				<select class="form-control select-currencies" name="tradedCurrency"></select>
 			</div>
 		</div>
 		<div class="form-group">
 			<label>Payment</label>
 			<div class="form-inline">
-				<input class="form-control" type="number">
-				<select class="form-control select-currencies"></select>
+				<input class="form-control" type="number" name="paymentAmount">
+				<select class="form-control select-currencies" name="paymentCurrency"></select>
 			</div>
 		</div>
 		<div class="form-group">
 			<label>Fee</label>
 			<div class="form-inline">
-				<input class="form-control" type="number">
-				<select class="form-control select-currencies"></select>
+				<input class="form-control" type="number" name="feeAmount">
+				<select class="form-control select-currencies" name="feeCurrency"></select>
 			</div>
 		</div>
 		<div class="form-group">
 			<label>Blockchain ref (if applicable)</label>
-			<input class="form-control">
+			<input class="form-control" name="blockchainRef">
 		</div>
 		<div class="form-group">
 			<label>Observations</label>
-			<textarea class="form-control"></textarea>
+			<textarea class="form-control" name="observations"></textarea>
 		</div>
+		<button type="button" class="js-save btn btn-primary">Save</button>
 	</form>
 </div>
 
