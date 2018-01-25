@@ -1,9 +1,18 @@
 const Overlay = (function () {
 	const $el = $('#overlay')
+	const $fields = $el.find('form [name]')
 	$el.find('.background').on('click', () => {
 		Overlay.hide()
 	})
 	$el.find('.js-save').on('click', () => {
+		$fields.each((i, field) => {
+			if (field.name === 'timestamp') {
+				// TODO EXCEPTIONS SHOULD PROBABLY BE HANDLED BY THE MODEL
+				model.set(field.name, new Date(field.value))
+			} else {
+				model.set(field.name, field.value)
+			}
+		})
 		transactions.add(model)
 		model.save()
 		Overlay.hide()
@@ -19,7 +28,7 @@ const Overlay = (function () {
 		},
 		setTransaction (transaction) {
 			model = transaction
-			$el.find('form [name]').each((i, field) => {
+			$fields.each((i, field) => {
 				field.value = transaction.getFieldValue(field.name)
 			})
 		},

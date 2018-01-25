@@ -7,7 +7,7 @@ const SelectCurrenciesView = Backbone.View.extend({
 		this.$el.empty()
 		this.$el.append(`<option value>-</option>`)
 		this.collection.forEach(currency => {
-			this.$el.append(`<option value="${currency.getSymbol()}">${currency.getSymbol()}</option>`)
+			this.$el.append(`<option value="${currency.getId()}">${currency.getSymbol()}</option>`)
 		})
 	}
 })

@@ -1,4 +1,7 @@
 const TransactionModel = Backbone.Model.extend({
+	getId () {
+		return this.get('_id')
+	},
 	getAccount () {
 		const account = this.get('account')
 		if (!account) {
@@ -49,16 +52,29 @@ const TransactionModel = Backbone.Model.extend({
 		if (field === 'account') {
 			var account = this.getAccount()
 			if (account) {
-				return account.getName()
+				return account.getId()
 			}
 		}
 		if (field === 'tradedCurrency' || field === 'paymentCurrency' || field === 'feeCurrency') {
 			var currency = this.get(field)
 			if (currency) {
-				return currency[0].symbol
+				return currency[0].getId()
 			}
 		}
-		return this.get(field)
+		if (field === 'timestamp') {
+			var timestamp = this.get('timestamp')
+			var date = timestamp ? new Date(timestamp) : new Date()
+			return Utils.formatDate(date)
+		}
+		var value = this.get(field)
+		if (!value) {
+			if (field === 'tradedAmount' || field === 'paymentAmount' || field === 'feeAmount') {
+				value = 0
+			} else {
+				value = ''
+			}
+		}
+		return value
 	},
 	format () {
 		var result = ''

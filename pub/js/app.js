@@ -67,15 +67,15 @@ $('.js-filter').on('change', (ev) => {
 function passFilter (transaction) {
 	if (
 		filters.currency &&
-		transaction.getTraded().getCurrency().getSymbol() !== filters.currency &&
-		transaction.getPayment().getCurrency().getSymbol() !== filters.currency &&
-		transaction.getFee().getCurrency().getSymbol() !== filters.currency
+		transaction.getTraded().getCurrency().getId() !== filters.currency &&
+		transaction.getPayment().getCurrency().getId() !== filters.currency &&
+		transaction.getFee().getCurrency().getId() !== filters.currency
 	) {
 		return false
 	}
 
 	if (
-		filters.account && transaction.getAccount().getName() !== filters.account
+		filters.account && transaction.getAccount().getId() !== filters.account
 	) {
 		return false
 	}

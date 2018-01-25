@@ -22,4 +22,12 @@ const Utils = {
 			return `&euro; ${amount.toFixed(2)}`
 		}
 	},
+	padd (num, digits) {
+		val = (new Array(digits + 1).join('0')) + num
+		val = val.slice(val.length - digits)
+		return val
+	},
+	formatDate (date) {
+		return `${Utils.padd(date.getFullYear(), 4)}-${Utils.padd(date.getMonth() + 1, 2)}-${Utils.padd(date.getDate(), 2)}T${Utils.padd(date.getHours(), 2)}:${Utils.padd(date.getMinutes(), 2)}`
+	},
 }
