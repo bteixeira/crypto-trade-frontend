@@ -6,12 +6,7 @@ const Overlay = (function () {
 	})
 	$el.find('.js-save').on('click', () => {
 		$fields.each((i, field) => {
-			if (field.name === 'timestamp') {
-				// TODO EXCEPTIONS SHOULD PROBABLY BE HANDLED BY THE MODEL
-				model.set(field.name, new Date(field.value))
-			} else {
-				model.set(field.name, field.value)
-			}
+			model.setField(field.name, field.value)
 		})
 		transactions.add(model)
 		model.save()

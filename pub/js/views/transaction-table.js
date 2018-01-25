@@ -2,6 +2,13 @@ const TransactionTableView = Backbone.View.extend({
 	initialize () {
 		this.listenTo(this.collection, 'sync change destroy', this.render)
 		this.render()
+		this.$el.on('click', '.js-edit', function () {
+			const $row = $(this).closest('.transaction-row')
+			const id = $row.data('transaction-id')
+			const model = transactions.get(id)
+			Overlay.setTransaction(model)
+			Overlay.show()
+		})
 		this.$el.on('click', '.js-delete', function () {
 			if (window.confirm('Delete this transaction?')) {
 				const $row = $(this).closest('.transaction-row')

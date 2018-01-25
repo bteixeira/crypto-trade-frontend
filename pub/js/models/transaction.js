@@ -59,7 +59,7 @@ const TransactionModel = Backbone.Model.extend({
 		if (field === 'tradedCurrency' || field === 'paymentCurrency' || field === 'feeCurrency') {
 			var currency = this.get(field)
 			if (currency) {
-				return currency[0].getId()
+				return new CurrencyModel(currency[0]).getId()
 			}
 		}
 		if (field === 'timestamp') {
@@ -76,6 +76,17 @@ const TransactionModel = Backbone.Model.extend({
 			}
 		}
 		return value
+	},
+	setField (field, value) {
+		if (field === 'timestamp') {
+			this.set(field, new Date(value).toString())
+		} else if (field === 'account') {
+			this.set(field, [accounts.get(value).attributes])
+		} else if (field === 'tradedCurrency' || field === 'paymentCurrency' || field === 'feeCurrency') {
+			this.set(field, [currencies.get(value).attributes])
+		} else {
+			this.set(field, value)
+		}
 	},
 	format () {
 		var result = ''
