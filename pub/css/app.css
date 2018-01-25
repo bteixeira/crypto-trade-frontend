@@ -2,6 +2,11 @@ body, html {
 	font-family: 'Roboto', sans-serif;
 }
 
+#table-transactions thead td {
+	font-weight: bold;
+	text-align: center;
+}
+
 #table-transactions tbody tr:nth-child(odd) {
 	background: #f1f1f1;
 }

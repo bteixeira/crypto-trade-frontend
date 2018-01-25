@@ -1,7 +1,15 @@
 const TransactionTableView = Backbone.View.extend({
 	initialize () {
-		this.listenTo(this.collection, 'sync change', this.render)
+		this.listenTo(this.collection, 'sync change destroy', this.render)
 		this.render()
+		this.$el.on('click', '.js-delete', function () {
+			if (window.confirm('Delete this transaction?')) {
+				const $row = $(this).closest('.transaction-row')
+				const id = $row.data('transaction-id')
+				const model = transactions.get(id)
+				model.destroy({wait: true})
+			}
+		})
 	},
 	render () {
 		const $tbody = this.$('tbody')
@@ -22,12 +30,12 @@ const TransactionTableView = Backbone.View.extend({
 			balance.add(fee.neg(), accountName)
 			if (passFilter(transaction)) {
 				$tbody.append(`
-				<tr data-transaction-id="">
+				<tr class="transaction-row" data-transaction-id="${transaction.cid}">
 					<td>${transaction.getTimestamp().toLocaleDateString()} ${transaction.getTimestamp().toLocaleTimeString()}</td>
 					<td>${accountName}</td>
 					<td>${transaction.format()}</td>
 					<td>${transaction.getPrice()}</td>
-					<td>${fee}</td>
+					<td>${fee.getAmount() ? fee : ''}</td>
 					<td>${transaction.getTotal()}</td>
 					<td>${balance.getAll(accountName).only(...currencies)}</td>
 					<td>${balance.getAll().only(...currencies)}</td>
