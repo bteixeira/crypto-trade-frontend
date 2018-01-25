@@ -60,6 +60,10 @@ transactions.fetch()
 const filters = {
 	// currency:'XRP',
 }
+$('.js-filter').on('change', (ev) => {
+	filters[ev.target.name] = ev.target.value
+	transactionsView.render()
+})
 function passFilter (transaction) {
 	if (
 		filters.currency &&
