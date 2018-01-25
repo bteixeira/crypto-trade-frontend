@@ -10,7 +10,7 @@ const AmountModel = Backbone.Model.extend({
 	},
 
 	getAmount () {
-		return this.get('amount')
+		return parseFloat(this.get('amount'))
 	},
 
 	getCurrency () {

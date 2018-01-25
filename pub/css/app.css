@@ -29,7 +29,7 @@ body, html {
 	border-radius: 5px;
 	padding: 5px;
 	white-space: nowrap;
-	background: #448833;
+	background: darkgray;
 	color: #eee;
 	font-size: 11px;
 	font-family: monospace;
@@ -38,14 +38,24 @@ body, html {
 	margin: 5px 0;
 }
 
-.money-pill.-eur{
+.money-pill.-eur {
 	background: darkblue;
 	color: #f1f133;
 }
 
-.money-pill.-xrp{
+.money-pill.-xrp {
 	background: #111;
 	color: #ff3333;
+}
+
+.money-pill.-btc {
+	background: #ff7500;
+	color: white;
+}
+
+.money-pill.-eth {
+	background: purple;
+	color: white;
 }
 
 strong {
