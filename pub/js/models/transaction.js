@@ -60,16 +60,23 @@ const TransactionModel = Backbone.Model.extend({
 		return _.uniq(amounts, false, a => a.getSymbol())
 	},
 	getFieldValue (field) {
+		// TODO THIS METHOD IS BOTH DOING DATA CONVERSION AND PROVIDING DEFAULT VALUES, THERE SHOULD PROBABLY BE A SEPARATION
 		if (field === 'account') {
 			var account = this.getAccount()
 			if (account) {
 				return account.getId()
+			} else {
+				return accounts.get(filters.account) && accounts.get(filters.account).getId() // TODO DEFAULT VALUE
 			}
 		}
 		if (field === 'tradedCurrency' || field === 'paymentCurrency' || field === 'feeCurrency') {
 			var currency = this.get(field)
-			if (currency) {
+			if (currency && currency.length) {
 				return new CurrencyModel(currency[0]).getId()
+			} else if (field === 'tradedCurrency') {
+				return currencies.get(filters.currency) && currencies.get(filters.currency).getId() // TODO DEFAULT VALUE // TODO THIS IS SILLY, WE'RE GETTING A MODEL BY ID AND THEN GETTING ITS ID
+			} else {
+				return currencies.findWhere({symbol: 'EUR'}).getId()
 			}
 		}
 		if (field === 'timestamp') {

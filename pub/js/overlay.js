@@ -24,7 +24,7 @@ const Overlay = (function () {
 		setTransaction (transaction) {
 			model = transaction
 			$fields.each((i, field) => {
-				field.value = transaction.getFieldValue(field.name)
+				$(field).val(transaction.getFieldValue(field.name))
 			})
 		},
 	}
