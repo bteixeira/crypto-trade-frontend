@@ -29,20 +29,24 @@ const TransactionTableView = Backbone.View.extend({
 			const accountName = transaction.getAccount().getName()
 			const currencies = transaction.getCurrencies()
 			balance.add(traded, accountName)
-			if (traded.getAmount() < 0) {
-				balance.add(payment, accountName)
-			} else {
-				balance.add(payment.neg(), accountName)
+			if (payment && payment.getAmount()) {
+				if (traded.getAmount() < 0) {
+					balance.add(payment, accountName)
+				} else {
+					balance.add(payment.neg(), accountName)
+				}
 			}
-			balance.add(fee.neg(), accountName)
+			if (fee && fee.getAmount()) {
+				balance.add(fee.neg(), accountName)
+			}
 			if (passFilter(transaction)) {
 				$tbody.append(`
 				<tr class="transaction-row" data-transaction-id="${transaction.cid}">
 					<td>${transaction.getTimestamp().toLocaleDateString()} ${transaction.getTimestamp().toLocaleTimeString()}</td>
 					<td>${accountName}</td>
 					<td>${transaction.format()}</td>
-					<td>${transaction.getPrice()}</td>
-					<td>${fee.getAmount() ? fee : ''}</td>
+					<td>${transaction.getPriceFormatted()}</td>
+					<td>${(fee && fee.getAmount()) ? fee : ''}</td>
 					<td>${transaction.getTotal()}</td>
 					<td>${balance.getAll(accountName).only(...currencies)}</td>
 					<td>${balance.getAll().only(...currencies)}</td>

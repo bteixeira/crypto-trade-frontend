@@ -5,28 +5,28 @@ const TransactionModel = Backbone.Model.extend({
 	},
 	getAccount () {
 		const account = this.get('account')
-		if (!account) {
+		if (!account || !account.length) {
 			return null
 		}
 		return new AccountModel(account[0])
 	},
 	getTraded () {
 		var currency = this.get('tradedCurrency')
-		if (!currency) {
+		if (!currency || !currency.length) {
 			return null
 		}
 		return new AmountModel(new CurrencyModel(currency[0]), this.get('tradedAmount'))
 	},
 	getPayment () {
 		var currency = this.get('paymentCurrency')
-		if (!currency) {
+		if (!currency || !currency.length) {
 			return null
 		}
 		return new AmountModel(new CurrencyModel(currency[0]), this.get('paymentAmount'))
 	},
 	getFee () {
 		var currency = this.get('feeCurrency')
-		if (!currency) {
+		if (!currency || !currency.length) {
 			return null
 		}
 		return new AmountModel(new CurrencyModel(currency[0]), this.get('feeAmount'))
@@ -41,11 +41,21 @@ const TransactionModel = Backbone.Model.extend({
 		return multi
 	},
 	getPrice () {
-		const price = this.getPayment().getAmount() / this.getTraded().getAmount()
-		return `${price.toFixed(4)} ${this.getPayment().getSymbol()}/${this.getTraded().getSymbol()}`
+		if (!this.getPayment()) {
+			return NaN
+		}
+		return this.getPayment().getAmount() / this.getTraded().getAmount()
+	},
+	getPriceFormatted () {
+		const price = this.getPrice()
+		if (isNaN(price)) {
+			return ''
+		} else {
+			return `${price.toFixed(4)} ${this.getPayment().getSymbol()}/${this.getTraded().getSymbol()}`
+		}
 	},
 	getCurrencies () {
-		var amounts = [this.getTraded(), this.getPayment(), this.getFee()]
+		var amounts = _.compact([this.getTraded(), this.getPayment(), this.getFee()])
 		amounts = amounts.map(a => a.getCurrency())
 		return _.uniq(amounts, false, a => a.getSymbol())
 	},
@@ -81,9 +91,11 @@ const TransactionModel = Backbone.Model.extend({
 		if (field === 'timestamp') {
 			this.set(field, new Date(value).toString())
 		} else if (field === 'account') {
-			this.set(field, [accounts.get(value).attributes])
+			var account = accounts.get(value)
+			this.set(field, account ? [account.attributes] : [])
 		} else if (field === 'tradedCurrency' || field === 'paymentCurrency' || field === 'feeCurrency') {
-			this.set(field, [currencies.get(value).attributes])
+			var currency = currencies.get(value)
+			this.set(field, currency ? [currencies.get(value).attributes] : [])
 		} else {
 			this.set(field, value)
 		}
@@ -91,13 +103,26 @@ const TransactionModel = Backbone.Model.extend({
 	format () {
 		var result = ''
 		var traded = this.getTraded()
-		if (traded.getAmount() > 0) {
-			result += '<strong>BUY</strong> '
-		} else if (traded.getAmount() < 0) {
-			result += '<strong>SELL</strong> '
-			traded = traded.neg()
+		var payment = this.getPayment()
+
+		if (payment) {
+			if (traded.getAmount() > 0) {
+				result += '<strong>BUY</strong> '
+			} else if (traded.getAmount() < 0) {
+				result += '<strong>SELL</strong> '
+				traded = traded.neg()
+			}
+			result += traded + ' for ' + this.getPayment()
+		} else {
+			if (traded.getAmount() > 0) {
+				result += '<strong>RECEIVE</strong> '
+			} else if (traded.getAmount() < 0) {
+				result += '<strong>SEND</strong> '
+				traded = traded.neg()
+			}
+			result += traded
 		}
-		result += traded + ' for ' + this.getPayment()
+
 		return result
 	},
 })

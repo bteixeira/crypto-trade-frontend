@@ -23,6 +23,9 @@ const MultiAmountModel = Backbone.Model.extend({
 		return other
 	},
 	add (amount) {
+		if (!amount) {
+			return
+		}
 		const symbol = amount.getCurrency().getSymbol()
 		var _amount = this._amounts.get(symbol)
 		if (_amount) {
