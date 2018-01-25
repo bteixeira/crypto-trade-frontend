@@ -68,8 +68,8 @@ function passFilter (transaction) {
 	if (
 		filters.currency &&
 		transaction.getTraded().getCurrency().getId() !== filters.currency &&
-		transaction.getPayment().getCurrency().getId() !== filters.currency &&
-		transaction.getFee().getCurrency().getId() !== filters.currency
+		(!transaction.getPayment() || transaction.getPayment().getCurrency().getId() !== filters.currency) &&
+		(!transaction.getFee() || transaction.getFee().getCurrency().getId() !== filters.currency)
 	) {
 		return false
 	}
